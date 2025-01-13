@@ -4,10 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Client</title>
+
+    <style>
+        .main-grid {
+            width: calc(100vw - 40px);
+            height: calc(100vh - 40px);
+            margin: 1.25rem;
+
+            display: grid;
+            grid-template-columns: calc(25% - 50px) 75%;
+            grid-template-rows: 100%;
+            gap: 50px
+        }
+
+        .email-list {
+            border-width: 2px;
+            border-color: rgba(255,255,255,.2);
+            border-radius: 1rem;
+            padding: 1rem;
+
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .email-list-item {
+            width: 100%;
+            height: 5rem;
+            background-color: #202225;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            color: white;
+
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+        }
+
+        .email-list-item:hover {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body style="margin: 0;">
     <script type="module" src="index.js"></script>
-    <div class="bg-background bg-center bg-cover fixed bg-triangles w-[100vw] h-[100vh] m-0"><div class="bg-background opacity-50 w-full h-full"></div></div>
+    <div class="bg-background bg-center bg-cover fixed bg-triangles w-screen h-screen m-0 -z-10 top-0 left-0"><div class="bg-background opacity-50 w-full h-full"></div></div>
+    
     <compose-email></compose-email>
+
+    <div class="main-grid">
+        <ul class="backdrop-blur-lg shadow-lg email-list">
+            <li class="email-list-item">
+                <img src="" alt="" class="h-full aspect-square rounded-md">
+                <div class="flex flex-col flex-grow">
+                    <span class="text-md">Subject Text</span>
+                    <p class="flex-grow text-sm">Body preview</p>
+                </div>
+            </li>
+        </ul>
+        <div class="backdrop-blur-lg border-2 border-[rgba(255,255,255,.2)] shadow-xl rounded-2xl p-4 text-white flex flex-col">
+        </div>
+    </div>
 </body>
 </html>

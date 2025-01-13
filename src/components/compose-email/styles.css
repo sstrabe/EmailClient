@@ -1,0 +1,7 @@
+.compose-input {
+    width: 100%;
+    background-color: transparent;
+    border-color: rgba(255,255,255,.2);
+    border-top-width: 2px;
+    padding: 0.2rem 1rem;
+}

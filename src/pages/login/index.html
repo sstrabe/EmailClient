@@ -6,10 +6,14 @@
     <title>Email Client | Login</title>
 </head>
 <body style="display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw; position: fixed;">
-    <img src="" alt="Background" style="width: 100vw; height: 100vh;">
-    <form action="" class="">
-        <input type="email">
-        <input type="password">
+    <script type="module" src="/login/index.js"></script>
+    <div class="bg-background bg-center bg-cover fixed bg-triangles w-[100vw] h-[100vh] m-0 -z-10"><div class="bg-background opacity-50 w-full h-full"></div></div>
+    
+    <form action="" id="loginForm" class="flex flex-col gap-4 w-1/4 backdrop-blur-lg border-2 border-[rgba(255,255,255,.2)] shadow-xl rounded-3xl p-6">
+        <h1 class="text-white text-center w-full text-2xl">Login</h1>
+        <input name="email" type="email" class="bg-transparent rounded-full text-white px-5 py-2 border-2 border-[rgba(255,255,255,.2)]" placeholder="Email">
+        <input name="password" type="password" class="bg-transparent rounded-full text-white px-5 py-2 border-2 border-[rgba(255,255,255,.2)]" placeholder="Password">
+        <button class="bg-white text-black rounded-full px-5 py-2" type="submit">Login</button>
     </form>
 </body>
 </html>

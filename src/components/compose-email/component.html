@@ -1,1 +1,11 @@
-<form action="" class="flex fixed w-1/4 h-1/4 bg-slate-800 rounded-md shadow-md">Hi</form>
+<form action="" id="compose" class="flex fixed w-1/4 h-1/2 bg-background rounded-t-lg shadow-md bottom-0 right-6 items-center flex-col text-white transition-all z-10">
+    <span class="h-8 w-11/12 text-white flex flex-row justify-between items-center hover:cursor-pointer" id="compose-top">New Email <button type="submit" class="bg-icon rounded-md px-2" id="send-button">Send</button></span>
+    <input type="email" name="sender" id="sender" class="compose-input collapsable" placeholder="Sender">
+
+    <input type="text" name="subject" id="subject" class="compose-input collapsable" placeholder="Subject">
+    <textarea name="content" id="content" placeholder="Content" class="flex-grow compose-input collapsable"></textarea>
+
+    <input type="text" name="recipient" id="recipient" class="compose-input collapsable" placeholder="Recipient">
+    <input type="text" name="cc" id="recipient" class="w-full bg-transparent px-4 collapsable" placeholder="cc">
+    <input type="text" name="bcc" id="recipient" class="w-full bg-transparent px-4 collapsable" placeholder="bcc">
+</form>
