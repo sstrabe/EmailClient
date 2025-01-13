@@ -28,7 +28,7 @@ if (new Date(token[1].split('=')[1]) < new Date()) {
 };
 
 const res = await fetch('/api/emails', {
-    method: 'GET',
+    method: 'PATCH',
     body: JSON.stringify({
         mailbox: 'INBOX',
         limit: 10
@@ -40,6 +40,7 @@ const res = await fetch('/api/emails', {
 })
 
 const body = await res.json()
+console.log(body)
 if ('data' in body) {
     body.data.forEach(async (email: ParsedMail) => {
         const { subject, from, text } = email

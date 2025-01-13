@@ -36,12 +36,12 @@ export const POST: Handler = async (req, res) => {
         subject,
         text: content
     }, (err, info) => {
-        if (err) { res.sendStatus(400); return };
+        if (err) { res.sendStatus(400); console.warn(err); return };
         res.sendStatus(200).send(info.response);
     });
 };
 
-export const GET: Handler = async (req, res) => {
+export const PATCH: Handler = async (req, res) => {
     if (!req.auth) return;
 
     const { mailbox, limit } = req.body;
