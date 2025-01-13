@@ -65,14 +65,31 @@ export const PATCH: Handler = async (req, res) => {
         try {
             //@ts-ignore
             const emails = await client.fetchAll(createArray(client.mailbox.exists - limit, client.mailbox.exists), {})
+
+            const data = emails.map(async (email) => {    
+                let { meta, content } = await client.download(email.seq.toString());
+                const contentString = (await concat_RS(content)).toString()
+                const parsedMail: ParsedMail = await simpleParser(contentString)
+
+                return {
+                    subject: parsedMail.subject,
+                    from: parsedMail.from?.text,
+                    content: parsedMail.text,
+                    html: parsedMail.html || parsedMail.textAsHtml,
+                    uid: email.seq
+                }
+            });
+
+            await Promise.all(data)
+
+            let resolved: any[] = []
+            await Promise.all(data.map(async (mail) => {
+                const stuff = await mail;
+                resolved.push(stuff)
+            }))
+
             res.status(200).send({
-                data: emails.map(async (email) => {    
-                    let { meta, content } = await client.download(email.seq.toString());
-                    const contentString = (await concat_RS(content)).toString()
-                    const parsedMail: ParsedMail = await simpleParser(content)
-    
-                    return parsedMail
-                })
+                data: resolved
             })
         } finally {
             lock.release()

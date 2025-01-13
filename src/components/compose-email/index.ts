@@ -41,8 +41,6 @@ class ComposeEmail extends HTMLElement {
             const bcc =  (submitForm.elements.namedItem('bcc') as HTMLInputElement).value
             const cc =  (submitForm.elements.namedItem('cc') as HTMLInputElement).value
 
-            console.log('Recipient '+recipient)
-
             const token = localStorage.getItem('token')?.split(';') as string[]
             
             if (new Date(token[1].split('=')[1]) < new Date()) {

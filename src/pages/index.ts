@@ -1,12 +1,13 @@
 import './globals.css';
 import '../components/compose-email/index.js';
-import { ParsedMail } from 'mailparser';
+import '../components/email-view/index.js';
 
 const emailList = document.querySelector('ul');
 const template = document.getElementById('email-list-template') as HTMLTemplateElement;
 
-function createEmailListItem(subject: string, sender: string, content: string) {
+function createEmailListItem(subject: string, sender: string, content: string, uid: string) {
     const clone = template.content.cloneNode(true) as HTMLElement;
+    (clone.children.item(0) as Element).id = uid
 
     const img = clone.querySelector('img') as HTMLImageElement;
     const subjectElement = clone.querySelector('#subject') as HTMLSpanElement;
@@ -15,7 +16,7 @@ function createEmailListItem(subject: string, sender: string, content: string) {
 
     subjectElement.textContent = subject
     senderElement.textContent = sender
-    bodyElement.textContent = content.slice(0, 50)
+    bodyElement.textContent = content
 
     emailList?.appendChild(clone)
 }
@@ -31,7 +32,7 @@ const res = await fetch('/api/emails', {
     method: 'PATCH',
     body: JSON.stringify({
         mailbox: 'INBOX',
-        limit: 10
+        limit: 20
     }),
     headers: {
         'Content-Type': 'application/json',
@@ -40,10 +41,14 @@ const res = await fetch('/api/emails', {
 })
 
 const body = await res.json()
-console.log(body)
-if ('data' in body) {
-    body.data.forEach(async (email: ParsedMail) => {
-        const { subject, from, text } = email
-        createEmailListItem(subject!, from?.text!, text!)
-    })
-}
+body.data.forEach(async (email: any) => {
+    const { subject, from, content, uid } = email
+
+    try {
+        sessionStorage.setItem(uid, JSON.stringify(email))
+    } catch(err) {
+        console.warn(err)
+    }
+
+    createEmailListItem(subject!, from, content!, uid)
+})
