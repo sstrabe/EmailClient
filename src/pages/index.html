@@ -54,13 +54,16 @@
 
     <div class="main-grid">
         <ul class="backdrop-blur-lg shadow-lg email-list">
-            <li class="email-list-item">
-                <img src="" alt="" class="h-full aspect-square rounded-md">
-                <div class="flex flex-col flex-grow">
-                    <span class="text-md">Subject Text</span>
-                    <p class="flex-grow text-sm">Body preview</p>
-                </div>
-            </li>
+            <template id="email-list-template">
+                <li class="email-list-item">
+                    <img src="" alt="" class="h-full aspect-square rounded-md">
+                    <div class="flex flex-col flex-grow">
+                        <span class="text-md" id="subject">Subject Text</span>
+                        <span class="text-sm" id="sender">Sender</span>
+                        <p class="flex-grow text-sm" id="content">Body preview</p>
+                    </div>
+                </li>
+            </template>
         </ul>
         <div class="backdrop-blur-lg border-2 border-[rgba(255,255,255,.2)] shadow-xl rounded-2xl p-4 text-white flex flex-col">
         </div>
