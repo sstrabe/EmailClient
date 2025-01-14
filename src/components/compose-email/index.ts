@@ -18,6 +18,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 styleSheet.insertRule(rule.cssText, styleSheet.cssRules.length);
 });
 
+interface Elements {
+    submitForm: HTMLFormElement
+    sender: HTMLInputElement
+    recipient: HTMLInputElement
+    subject: HTMLInputElement
+    content: HTMLTextAreaElement
+    bcc: HTMLInputElement
+    cc: HTMLInputElement
+}
+
 class ComposeEmail extends HTMLElement {
     constructor(
         public visible = true
@@ -29,19 +39,38 @@ class ComposeEmail extends HTMLElement {
         this.shadowRoot?.appendChild(template.content.cloneNode(true));
     }
 
+    submitForm: HTMLFormElement | null = null
+    sender: HTMLInputElement | null = null
+    recipient: HTMLInputElement | null = null
+    subject: HTMLInputElement | null = null
+    content: HTMLTextAreaElement | null = null
+    bcc: HTMLInputElement | null = null
+    cc: HTMLInputElement | null = null
+
+    confirmElements(): asserts this is Elements {
+        if (!this.submitForm || !this.sender || !this.recipient || !this.subject || !this.content || !this.bcc || !this.cc) throw new Error('Missing required Elements');
+    }
+
     connectedCallback() {
-        const submitForm: HTMLFormElement = this.shadowRoot?.getElementById('compose') as HTMLFormElement;
-        submitForm.addEventListener('submit', async (event) => {
+        this.submitForm = this.shadowRoot?.getElementById('compose') as HTMLFormElement;
+        this.sender     = this.submitForm?.elements.namedItem('sender') as HTMLInputElement;
+        this.recipient  = this.submitForm?.elements.namedItem('recipient') as HTMLInputElement;
+        this.subject    = this.submitForm?.elements.namedItem('subject') as HTMLInputElement;
+        this.content    = this.submitForm?.elements.namedItem('content') as HTMLTextAreaElement;
+        this.bcc        =  this.submitForm?.elements.namedItem('bcc') as HTMLInputElement;
+        this.cc         =  this.submitForm?.elements.namedItem('cc') as HTMLInputElement;
+
+        this.submitForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const sender = (submitForm.elements.namedItem('sender') as HTMLInputElement).value;
-            const recipient = (submitForm.elements.namedItem('recipient') as HTMLInputElement).value;
-            const subject = (submitForm.elements.namedItem('subject') as HTMLInputElement).value;
-            const content = (submitForm.elements.namedItem('content') as HTMLTextAreaElement).value;
-            const bcc =  (submitForm.elements.namedItem('bcc') as HTMLInputElement).value;
-            const cc =  (submitForm.elements.namedItem('cc') as HTMLInputElement).value;
+            const sender = this.sender?.value;
+            const recipient = this.recipient?.value;
+            const subject = this.subject?.value;
+            const content = this.content?.value;
+            const bcc =  this.bcc?.value;
+            const cc =  this.cc?.value;
 
-            const token = localStorage.getItem('token')?.split(';') as string[]
+            const token = localStorage.getItem('token')?.split(';') as string[];  
             
             if (new Date(token[1].split('=')[1]) < new Date()) {
                 alert('You are not logged in');
@@ -65,23 +94,38 @@ class ComposeEmail extends HTMLElement {
 
         const topSpan: HTMLSpanElement = this.shadowRoot?.getElementById('compose-top') as HTMLSpanElement;
         topSpan.addEventListener('click', () => {
+            this.confirmElements();
             const collapsables = this.shadowRoot?.querySelectorAll('.collapsable');
 
             if (this.visible) {
-                submitForm.style.height = '2rem';
-                //@ts-ignore
-                collapsables?.forEach((el: HTMLElement) => {
+                this.submitForm.style.height = '2rem';
+
+                collapsables?.forEach((el: any) => {
                     el.style.display = 'none';
                 });
             } else {
-                submitForm.style.height = '50%';
-                //@ts-ignore
-                collapsables?.forEach((el: HTMLElement) => {
+                this.submitForm.style.height = '50%';
+
+                collapsables?.forEach((el: any) => {
                     el.style.display = 'block';
                 });
             }
             this.visible = !this.visible;
         });
+
+        this.addEventListener('template', (event: any) => {
+            this.confirmElements();
+
+            const { recipient, cc, bcc, content }: 
+                { recipient?: string, cc?: string, bcc?: string, content?: string } = event.detail;
+
+            this.recipient.defaultValue = recipient ?? '';
+            this.cc.defaultValue = cc ?? '';
+            this.bcc.defaultValue = bcc ?? '';
+            this.content.defaultValue = content ?? '';
+            
+            topSpan.click();
+        })
 
         topSpan.click();
     }
