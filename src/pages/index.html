@@ -13,7 +13,7 @@
 
             display: grid;
             grid-template-columns: calc(40% - 50px) 60%;
-            grid-template-rows: 100%;
+            grid-template-rows: calc(15% - 50px) 80%;
             gap: 50px
         }
 
@@ -53,6 +53,16 @@
     <compose-email></compose-email>
 
     <div class="main-grid">
+        <nav class="backdrop-blur-lg shadow-lg border-2 border-[rgba(255,255,255,.2)] rounded-2xl p-4 w-full h-full
+            flex flex-row items-center justify-start
+        ">
+            <a href="/login" class="rounded-lg bg-white px-3 py-2 text-center">Logout</a>
+        </nav>
+
+        <div class="w-full h-full backdrop-blur-lg shadow-lg border-2 border-[rgba(255,255,255,.2)] rounded-2xl p-4">
+            
+        </div>
+
         <ul class="backdrop-blur-lg shadow-lg email-list overflow-scroll">
             <template id="email-list-template">
                 <li class="email-list-item">

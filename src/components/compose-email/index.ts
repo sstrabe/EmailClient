@@ -34,12 +34,12 @@ class ComposeEmail extends HTMLElement {
         submitForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const sender = (submitForm.elements.namedItem('sender') as HTMLInputElement).value
-            const recipient = (submitForm.elements.namedItem('recipient') as HTMLInputElement).value
-            const subject = (submitForm.elements.namedItem('subject') as HTMLInputElement).value
-            const content = (submitForm.elements.namedItem('content') as HTMLTextAreaElement).value
-            const bcc =  (submitForm.elements.namedItem('bcc') as HTMLInputElement).value
-            const cc =  (submitForm.elements.namedItem('cc') as HTMLInputElement).value
+            const sender = (submitForm.elements.namedItem('sender') as HTMLInputElement).value;
+            const recipient = (submitForm.elements.namedItem('recipient') as HTMLInputElement).value;
+            const subject = (submitForm.elements.namedItem('subject') as HTMLInputElement).value;
+            const content = (submitForm.elements.namedItem('content') as HTMLTextAreaElement).value;
+            const bcc =  (submitForm.elements.namedItem('bcc') as HTMLInputElement).value;
+            const cc =  (submitForm.elements.namedItem('cc') as HTMLInputElement).value;
 
             const token = localStorage.getItem('token')?.split(';') as string[]
             
@@ -60,7 +60,7 @@ class ComposeEmail extends HTMLElement {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token[0]}`
                 }
-            })
+            });
         });
 
         const topSpan: HTMLSpanElement = this.shadowRoot?.getElementById('compose-top') as HTMLSpanElement;
@@ -71,17 +71,19 @@ class ComposeEmail extends HTMLElement {
                 submitForm.style.height = '2rem';
                 //@ts-ignore
                 collapsables?.forEach((el: HTMLElement) => {
-                    el.style.display = 'none'
-                })
+                    el.style.display = 'none';
+                });
             } else {
                 submitForm.style.height = '50%';
                 //@ts-ignore
                 collapsables?.forEach((el: HTMLElement) => {
-                    el.style.display = 'block'
-                })
+                    el.style.display = 'block';
+                });
             }
             this.visible = !this.visible;
         });
+
+        topSpan.click();
     }
 
     disconnectedCallback() {

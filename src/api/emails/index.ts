@@ -94,6 +94,8 @@ export const PATCH: Handler = async (req, res) => {
         } finally {
             lock.release()
         }
+
+        client.close()
     } catch (err) {
 
     }

@@ -5,6 +5,8 @@ import '../components/email-view/index.js';
 const emailList = document.querySelector('ul');
 const template = document.getElementById('email-list-template') as HTMLTemplateElement;
 
+if (!localStorage.getItem('token')) window.location.href = '/login'
+
 function createEmailListItem(subject: string, sender: string, content: string, uid: string) {
     const clone = template.content.cloneNode(true) as HTMLElement;
     (clone.children.item(0) as Element).id = uid
@@ -28,27 +30,29 @@ if (new Date(token[1].split('=')[1]) < new Date()) {
     localStorage.removeItem('token');
 };
 
-const res = await fetch('/api/emails', {
-    method: 'PATCH',
-    body: JSON.stringify({
-        mailbox: 'INBOX',
-        limit: 20
-    }),
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token[0]}`
-    }
-})
-
-const body = await res.json()
-body.data.forEach(async (email: any) => {
-    const { subject, from, content, uid } = email
-
-    try {
-        sessionStorage.setItem(uid, JSON.stringify(email))
-    } catch(err) {
-        console.warn(err)
-    }
-
-    createEmailListItem(subject!, from, content!, uid)
-})
+if (token) {
+    const res = await fetch('/api/emails', {
+        method: 'PATCH',
+        body: JSON.stringify({
+            mailbox: 'INBOX',
+            limit: 20
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token[0]}`
+        }
+    })
+    
+    const body = await res.json()
+    body.data.forEach(async (email: any) => {
+        const { subject, from, content, uid } = email
+    
+        try {
+            sessionStorage.setItem(uid, JSON.stringify(email))
+        } catch(err) {
+            console.warn(err)
+        }
+    
+        createEmailListItem(subject!, from, content!, uid)
+    })
+}
