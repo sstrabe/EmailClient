@@ -49,6 +49,7 @@ class EmailView extends HTMLElement {
             frame?.contentWindow?.document.open('text/html', 'replace');
             frame?.contentWindow?.document.write(email.html);
             frame?.contentWindow?.document.close();
+            frame?.contentWindow?.document.querySelectorAll('a').forEach((el) => el.target = '_blank')
         })
     };
 

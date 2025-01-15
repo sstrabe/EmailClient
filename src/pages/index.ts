@@ -40,7 +40,11 @@ async function fetchEmails() {
     })
     
     const body = await res.json()
-    body.data.forEach(async (email: any) => {
+    const data: any[] = body.data
+    
+    data.sort((a, b) => b.uid - a.uid)
+
+    data.forEach(async (email: any) => {
         const { subject, from, content, uid } = email
     
         try {
