@@ -71,12 +71,17 @@ export const PATCH: Handler = async (req, res) => {
                 const contentString = (await concat_RS(content)).toString()
                 const parsedMail: ParsedMail = await simpleParser(contentString)
 
+                const to = parsedMail.to ? (Array.isArray(parsedMail.to) ? parsedMail.to.map((mail) => mail.text) : [parsedMail.to.value]): null
+                const cc = parsedMail.cc ? (Array.isArray(parsedMail.cc) ? parsedMail.cc.map((mail) => mail.text) : [parsedMail.cc.value]): null
+                const bcc = parsedMail.bcc ? (Array.isArray(parsedMail.bcc) ? parsedMail.bcc.map((mail) => mail.text) : [parsedMail.bcc.value]): null
+
                 return {
                     subject: parsedMail.subject,
-                    from: parsedMail.from?.text,
+                    from: parsedMail.from?.value,
                     content: parsedMail.text,
                     html: parsedMail.html || parsedMail.textAsHtml,
-                    uid: email.seq
+                    uid: email.seq,
+                    to, cc, bcc
                 }
             });
 

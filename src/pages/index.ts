@@ -1,8 +1,9 @@
 import './globals.css';
 import '../components/compose-email/index.js';
 import '../components/email-view/index.js';
+import '../components/email-controls/index.js'
 
-const emailList = document.querySelector('ul');
+const emailList = document.querySelector('ul') as HTMLUListElement;
 const template = document.getElementById('email-list-template') as HTMLTemplateElement;
 
 if (!localStorage.getItem('token')) window.location.href = '/login'
@@ -23,14 +24,9 @@ function createEmailListItem(subject: string, sender: string, content: string, u
     emailList?.appendChild(clone)
 }
 
-const token = localStorage.getItem('token')?.split(';') as string[]
+async function fetchEmails() {
+    emailList.textContent = ''
 
-if (new Date(token[1].split('=')[1]) < new Date()) {
-    alert('You are not logged in');
-    localStorage.removeItem('token');
-};
-
-if (token) {
     const res = await fetch('/api/emails', {
         method: 'PATCH',
         body: JSON.stringify({
@@ -53,6 +49,16 @@ if (token) {
             console.warn(err)
         }
     
-        createEmailListItem(subject!, from, content!, uid)
+        createEmailListItem(subject!, `${from[0].name} <${from[0].address}>`, content!, uid)
     })
 }
+
+const token = localStorage.getItem('token')?.split(';') as string[]
+
+if (new Date(token[1].split('=')[1]) < new Date()) {
+    alert('You are not logged in');
+    localStorage.removeItem('token');
+};
+
+if (token) fetchEmails()
+document.addEventListener('fetch-emails', fetchEmails)

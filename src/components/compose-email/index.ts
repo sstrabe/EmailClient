@@ -47,18 +47,38 @@ class ComposeEmail extends HTMLElement {
     bcc: HTMLInputElement | null = null
     cc: HTMLInputElement | null = null
 
+    togglePrompt(visible: boolean) {
+        this.confirmElements();
+        const collapsables = this.shadowRoot?.querySelectorAll('.collapsable');
+
+        if (!visible) {
+            this.submitForm.style.height = '2rem';
+
+            collapsables?.forEach((el: any) => {
+                el.style.display = 'none';
+            });
+        } else {
+            this.submitForm.style.height = '50%';
+
+            collapsables?.forEach((el: any) => {
+                el.style.display = 'block';
+            });
+        }
+        this.visible = visible;
+    }
+
     confirmElements(): asserts this is Elements {
         if (!this.submitForm || !this.sender || !this.recipient || !this.subject || !this.content || !this.bcc || !this.cc) throw new Error('Missing required Elements');
     }
 
     connectedCallback() {
         this.submitForm = this.shadowRoot?.getElementById('compose') as HTMLFormElement;
-        this.sender     = this.submitForm?.elements.namedItem('sender') as HTMLInputElement;
-        this.recipient  = this.submitForm?.elements.namedItem('recipient') as HTMLInputElement;
-        this.subject    = this.submitForm?.elements.namedItem('subject') as HTMLInputElement;
-        this.content    = this.submitForm?.elements.namedItem('content') as HTMLTextAreaElement;
-        this.bcc        =  this.submitForm?.elements.namedItem('bcc') as HTMLInputElement;
-        this.cc         =  this.submitForm?.elements.namedItem('cc') as HTMLInputElement;
+        this.sender = this.submitForm?.elements.namedItem('sender') as HTMLInputElement;
+        this.recipient = this.submitForm?.elements.namedItem('recipient') as HTMLInputElement;
+        this.subject = this.submitForm?.elements.namedItem('subject') as HTMLInputElement;
+        this.content = this.submitForm?.elements.namedItem('content') as HTMLTextAreaElement;
+        this.bcc = this.submitForm?.elements.namedItem('bcc') as HTMLInputElement;
+        this.cc = this.submitForm?.elements.namedItem('cc') as HTMLInputElement;
 
         this.submitForm.addEventListener('submit', async (event) => {
             event.preventDefault();
@@ -67,17 +87,17 @@ class ComposeEmail extends HTMLElement {
             const recipient = this.recipient?.value;
             const subject = this.subject?.value;
             const content = this.content?.value;
-            const bcc =  this.bcc?.value;
-            const cc =  this.cc?.value;
+            const bcc = this.bcc?.value;
+            const cc = this.cc?.value;
 
-            const token = localStorage.getItem('token')?.split(';') as string[];  
-            
+            const token = localStorage.getItem('token')?.split(';') as string[];
+
             if (new Date(token[1].split('=')[1]) < new Date()) {
                 alert('You are not logged in');
                 localStorage.removeItem('token');
                 return;
             };
-            
+
             await fetch('/api/emails', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -93,41 +113,24 @@ class ComposeEmail extends HTMLElement {
         });
 
         const topSpan: HTMLSpanElement = this.shadowRoot?.getElementById('compose-top') as HTMLSpanElement;
-        topSpan.addEventListener('click', () => {
-            this.confirmElements();
-            const collapsables = this.shadowRoot?.querySelectorAll('.collapsable');
+        topSpan.addEventListener('click', () => this.togglePrompt(!this.visible));
 
-            if (this.visible) {
-                this.submitForm.style.height = '2rem';
-
-                collapsables?.forEach((el: any) => {
-                    el.style.display = 'none';
-                });
-            } else {
-                this.submitForm.style.height = '50%';
-
-                collapsables?.forEach((el: any) => {
-                    el.style.display = 'block';
-                });
-            }
-            this.visible = !this.visible;
-        });
-
-        this.addEventListener('template', (event: any) => {
+        document.addEventListener('compose-email', (event: any) => {
             this.confirmElements();
 
-            const { recipient, cc, bcc, content }: 
-                { recipient?: string, cc?: string, bcc?: string, content?: string } = event.detail;
+            const { recipient, cc, bcc, content, subject }:
+                { recipient?: string, cc?: string, bcc?: string, content?: string, subject?: string } = event.detail ?? {};
 
             this.recipient.defaultValue = recipient ?? '';
             this.cc.defaultValue = cc ?? '';
             this.bcc.defaultValue = bcc ?? '';
             this.content.defaultValue = content ?? '';
-            
-            topSpan.click();
+            this.subject.defaultValue = subject ?? '';
+
+            this.togglePrompt(true)
         })
 
-        topSpan.click();
+        this.togglePrompt(false)
     }
 
     disconnectedCallback() {

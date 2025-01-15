@@ -12,9 +12,9 @@
             margin: 1.25rem;
 
             display: grid;
-            grid-template-columns: calc(40% - 50px) 60%;
-            grid-template-rows: calc(15% - 50px) 80%;
-            gap: 50px
+            grid-template-columns: calc(40% - 20px) 60%;
+            grid-template-rows: calc(15% - 20px) 80%;
+            gap: 20px
         }
 
         .email-list {
@@ -53,15 +53,13 @@
     <compose-email></compose-email>
 
     <div class="main-grid">
-        <nav class="backdrop-blur-lg shadow-lg border-2 border-[rgba(255,255,255,.2)] rounded-2xl p-2 w-full h-full
-            flex flex-row items-center justify-normal
+        <nav class="backdrop-blur-lg shadow-lg border-2 border-[rgba(255,255,255,.2)] rounded-2xl p-4 w-full h-full max-h-14
+            flex flex-row items-center justify-normal text-white
         ">
-            <a href="/login" class="rounded-lg bg-white px-3 h-full text-lg flex flex-col justify-center items-center"><span>Logout</span></a>
+            <a href="/login" class="rounded-lg bg-primary px-3 text-lg flex flex-col justify-center items-center"><span>Logout</span></a>
         </nav>
 
-        <div class="w-full h-full backdrop-blur-lg shadow-lg border-2 border-[rgba(255,255,255,.2)] rounded-2xl p-4">
-
-        </div>
+        <email-controls></email-controls>
 
         <ul class="backdrop-blur-lg shadow-lg email-list overflow-scroll">
             <template id="email-list-template">

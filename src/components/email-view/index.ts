@@ -36,15 +36,17 @@ class EmailView extends HTMLElement {
 
             //@ts-ignore
             const item = event.target?.closest('li') as HTMLElement;
-            const emailId = item.id
-            console.log(emailId)
-            const email = JSON.parse(sessionStorage.getItem(emailId) || '')
-            if (!email) return
+            if (!item) return;
+            const emailId = item.id;
+            const email = JSON.parse(sessionStorage.getItem(emailId) || '');
+            if (!email) return;
 
-
+            document.dispatchEvent(new CustomEvent('email-selected', {
+                detail: emailId
+            }));
 
             const frame = this.shadowRoot?.querySelector('iframe');
-            frame?.contentWindow?.document.open('text/html', 'replace')
+            frame?.contentWindow?.document.open('text/html', 'replace');
             frame?.contentWindow?.document.write(email.html);
             frame?.contentWindow?.document.close();
         })
