@@ -14,3 +14,4 @@ Once the server is running you can login into your gmail account from the login 
 
 > [!Note]
 > For security reasons, gmail requires you to [create an app password](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://support.google.com/accounts/answer/185833%3Fhl%3Den&ved=2ahUKEwjGzp3ozPqKAxXgJNAFHaPkK7oQFnoECAsQAQ&usg=AOvVaw2qwXmKRTjsa0k-q38HqJIX), and use that to login.
+> Additionally, the dev command currently only works on macos and linux, due to the use of `rm` to remove the /dist directory. Simply removing the rm command will allow it to function.
