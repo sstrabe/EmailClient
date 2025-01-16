@@ -136,3 +136,33 @@ export const DELETE: Handler = async (req, res) => {
         res.sendStatus(400)
     }
 }
+
+export const PUT: Handler = async (req, res) => {
+    if (!req.auth) return;
+
+    const { mailbox, range, destination } = req.body;
+    const { email, password } = req.auth;
+
+    const client = new ImapFlow({
+        host: 'imap.gmail.com',
+        port: 993,
+        secure: true,
+
+        auth: {
+            user: email,
+            pass: password
+        }
+    })
+
+    try {
+        await client.connect()
+
+        const lock = await client.getMailboxLock(mailbox)
+        await client.messageMove(range, destination)
+        lock.release()
+
+        client.close()
+    } catch(err) {
+        res.sendStatus(400)
+    }
+}

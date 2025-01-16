@@ -113,6 +113,26 @@ class EmailControls extends HTMLElement {
 
             document.dispatchEvent(new Event('fetch-emails'));
         })
+
+        this.shadowRoot?.querySelector('button#archive')?.addEventListener('click', async () => {
+            const emailData = sessionStorage.getItem(this.currentEmailId);
+            const token = localStorage.getItem('token')?.split(';') as string[];
+            if (!emailData ||!token) return;
+
+            const email = JSON.parse(emailData);
+            await fetch('/api/emails', {
+                method: 'PUT',
+                body: JSON.stringify({
+                    mailbox: 'INBOX',
+                    destination: 'Archive',
+                    range: this.currentEmailId
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token[0]}`
+                }
+            });
+        })
     };
 
     disconnectedCallback() {
