@@ -18,14 +18,16 @@
         }
 
         .email-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .email-list-display {
             border-width: 2px;
             border-color: rgba(255,255,255,.2);
             border-radius: 1rem;
             padding: 1rem;
-
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
         }
 
         .email-list-item {
@@ -54,25 +56,28 @@
 
     <div class="main-grid">
         <nav class="backdrop-blur-lg shadow-lg border-2 border-[rgba(255,255,255,.2)] rounded-2xl p-4 w-full h-full max-h-14
-            flex flex-row items-center justify-normal text-white
+            flex flex-row items-center justify-normal text-white gap-1
         ">
             <a href="/login" class="rounded-lg bg-primary px-3 text-lg flex flex-col justify-center items-center"><span>Logout</span></a>
+            <div class="rounded-lg bg-primary px-3 text-lg flex flex-col justify-center items-center text-[rgba(255,255,255,0.8)]" id="loading"><span>Loading...</span></div>
         </nav>
-
         <email-controls></email-controls>
 
-        <ul class="backdrop-blur-lg shadow-lg email-list overflow-scroll">
-            <template id="email-list-template">
-                <li class="email-list-item">
-                    <img src="" alt="" class="h-full aspect-square rounded-md">
-                    <div class="flex flex-col flex-grow overflow-hidden">
-                        <span class="text-xs font-bold" id="sender">Sender</span>
-                        <span class="text-xs font-semibold" id="subject">Subject Text</span>
-                        <p class="flex-grow text-xs" id="content">Body preview</p>
-                    </div>
-                </li>
-            </template>
-        </ul>
+        <div class="backdrop-blur-lg shadow-lg email-list email-list-display overflow-scroll h-full w-full">
+            <ul class="h-fit w-full email-list">
+                <template id="email-list-template">
+                    <li class="email-list-item">
+                        <img src="" alt="" class="h-full aspect-square rounded-md">
+                        <div class="flex flex-col flex-grow overflow-hidden">
+                            <span class="text-xs font-bold" id="sender">Sender</span>
+                            <span class="text-xs font-semibold" id="subject">Subject Text</span>
+                            <p class="flex-grow text-xs" id="content">Body preview</p>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+            <div id="infiniteScroll" class="h-[5%] w-full bg-transparent z-10"></div>
+        </div>
         <email-view></email-view>
     </div>
 </body>

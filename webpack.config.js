@@ -13,7 +13,7 @@ export default {
     output: {
         filename: '[name]'
     },
-    mode: 'production',
+    mode: 'development',
     module: {
         rules: [
           {

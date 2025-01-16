@@ -4,6 +4,22 @@ import './styles.css';
 const template = document.createElement('template');
 template.innerHTML = component;
 
+interface Address {
+    name: string,
+    address: string
+}
+
+interface Email {
+    subject?: string
+    from?: Address
+    content?: string
+    html?: string
+    uid?: number
+    to?: Address[]
+    cc?: Address[]
+    bcc?: Address[]
+}
+
 const styleSheet = new CSSStyleSheet();
 document.addEventListener("DOMContentLoaded", () => {
     if (styleSheet.replace)
@@ -20,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 class EmailView extends HTMLElement {
     constructor(
-        private currentEmail: string
+        private headerVisible: boolean = true,
     ) {
         super();
 
@@ -30,27 +46,47 @@ class EmailView extends HTMLElement {
     }
 
     connectedCallback() {
-        const emailList = document.querySelector('.email-list') as HTMLElement
+        const frame = this.shadowRoot?.querySelector('iframe');
+        const header = this.shadowRoot?.querySelector('header');
+        const emailList = document.querySelector('.email-list') as HTMLElement;
+
         emailList.addEventListener('click', (event) => {
-            event.preventDefault()
+            event.preventDefault();
 
             //@ts-ignore
             const item = event.target?.closest('li') as HTMLElement;
             if (!item) return;
             const emailId = item.id;
-            const email = JSON.parse(sessionStorage.getItem(emailId) || '');
+            const email = JSON.parse(sessionStorage.getItem(emailId) || '') as Email;
             if (!email) return;
 
             document.dispatchEvent(new CustomEvent('email-selected', {
                 detail: emailId
             }));
 
-            const frame = this.shadowRoot?.querySelector('iframe');
+            const sender = header!.querySelector('#sender')!;
+            const subject = header!.querySelector('#subject')!;
+            const to = header!.querySelector('#to')!;
+            const cc = header!.querySelector('#cc')!;
+
+            sender.textContent = `From: ${email.from!.address}` || '';
+            subject.textContent = email.subject || '';
+            to.textContent = `To: ${email.to?.map((ad) => ad.address).join(', ') ?? ``}`;
+            cc.textContent = `Cc: ${email.cc?.map((ad) => ad.address).join(', ') ?? ``}`;
+
             frame?.contentWindow?.document.open('text/html', 'replace');
-            frame?.contentWindow?.document.write(email.html);
+            frame?.contentWindow?.document.write(email.html ?? '');
             frame?.contentWindow?.document.close();
-            frame?.contentWindow?.document.querySelectorAll('a').forEach((el) => el.target = '_blank')
+            frame?.contentWindow?.document.querySelectorAll('a').forEach((el) => el.target = '_blank');
+        });
+
+        header?.addEventListener('click', () => {
+            header!.style.height = this.headerVisible ? '36px' : 'auto'
+            header.querySelectorAll('.collapsable').forEach((el) => (el as HTMLElement).style.display = this.headerVisible ? 'none' : 'block')
+            this.headerVisible = !this.headerVisible
         })
+
+        header?.click()
     };
 
     disconnectedCallback() {
