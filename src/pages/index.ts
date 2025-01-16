@@ -58,7 +58,6 @@ async function fetchEmails(range?: number[] | number | SequenceString | SearchOb
             try {
                 sessionStorage.setItem(uid, JSON.stringify(email));
             } catch (err) {
-                ;
                 console.warn(err);
             };
 
@@ -90,13 +89,13 @@ document.addEventListener('set-error', (e) => {
     if (msg) {
         errorIndicator!.textContent = `Something went wrong: ${msg}`;
     } else {
-        errorIndicator!.textContent = ''
+        errorIndicator!.textContent = '';
     };
 });
 
 const handleIntersect = (entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry) => {
-        if (entry.isIntersecting) fetchEmails(createArray(lastEmail - 21, lastEmail - 1))
+        if (entry.isIntersecting) fetchEmails(createArray(lastEmail - 21, lastEmail - 1));
     });
 }
 
@@ -120,8 +119,8 @@ if (new Date(token[1].split('=')[1]) < new Date()) {
     localStorage.removeItem('token');
 };
 
-if (token) fetchEmails()
+if (token) fetchEmails();
 document.addEventListener('fetch-emails', () => {
     emailList.textContent = ''
-    fetchEmails()
-})
+    fetchEmails();
+});

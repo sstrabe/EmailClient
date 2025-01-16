@@ -1,12 +1,12 @@
 import '../globals.css';
 
 
-const loginForm = document.getElementById('loginForm') as HTMLFormElement
+const loginForm = document.getElementById('loginForm') as HTMLFormElement;
 loginForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const email = (loginForm.elements.namedItem('email') as HTMLInputElement).value
-    const password = (loginForm.elements.namedItem('password') as HTMLInputElement).value
+    const email = (loginForm.elements.namedItem('email') as HTMLInputElement).value;
+    const password = (loginForm.elements.namedItem('password') as HTMLInputElement).value;
 
     try {
         document.dispatchEvent(new CustomEvent('set-loading', { detail: true }));
@@ -40,4 +40,4 @@ loginForm?.addEventListener('submit', async (event) => {
     } finally {
         document.dispatchEvent(new CustomEvent('set-loading', { detail: false }));
     };
-})
+});

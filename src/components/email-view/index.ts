@@ -81,12 +81,12 @@ class EmailView extends HTMLElement {
         });
 
         header?.addEventListener('click', () => {
-            header!.style.height = this.headerVisible ? '36px' : 'auto'
-            header.querySelectorAll('.collapsable').forEach((el) => (el as HTMLElement).style.display = this.headerVisible ? 'none' : 'block')
-            this.headerVisible = !this.headerVisible
-        })
+            header!.style.height = this.headerVisible ? '36px' : 'auto';
+            header.querySelectorAll('.collapsable').forEach((el) => (el as HTMLElement).style.display = this.headerVisible ? 'none' : 'block');
+            this.headerVisible = !this.headerVisible;
+        });
 
-        header?.click()
+        header?.click();
     };
 
     disconnectedCallback() {
