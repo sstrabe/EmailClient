@@ -8,26 +8,36 @@ loginForm?.addEventListener('submit', async (event) => {
     const email = (loginForm.elements.namedItem('email') as HTMLInputElement).value
     const password = (loginForm.elements.namedItem('password') as HTMLInputElement).value
 
-    const response = await fetch('/api/login', {
-        method: 'POST',
-        body: JSON.stringify({
-            email, password
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
+    try {
+        document.dispatchEvent(new CustomEvent('set-loading', { detail: true }));
 
-    if (!response.ok) return
-
-    const body = await response.json()
-    const token = body.token
-    if (!token) return
-
-    const date = new Date();
-    date.setDate(date.getDate() + 7);
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            body: JSON.stringify({
+                email, password
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     
-    localStorage.setItem('token', `${token};expires=${date.toISOString()}`)
+        if (!response.ok) return;
+    
+        const body = await response.json();
+        const token = body.token;
+        if (!token) return;
+    
+        const date = new Date();
+        date.setDate(date.getDate() + 7);
+        
+        localStorage.setItem('token', `${token};expires=${date.toISOString()}`);
+    
+        window.location.href = '/';
 
-    window.location.href = '/'
+        document.dispatchEvent(new CustomEvent('set-error', { detail: null }));
+    } catch(err) {
+        document.dispatchEvent(new CustomEvent('set-error', { detail: `${err}` }));
+    } finally {
+        document.dispatchEvent(new CustomEvent('set-loading', { detail: false }));
+    };
 })

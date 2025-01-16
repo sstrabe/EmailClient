@@ -94,44 +94,61 @@ class EmailControls extends HTMLElement {
         })
 
         this.shadowRoot?.querySelector('button#delete')?.addEventListener('click', async () => {
-            const emailData = sessionStorage.getItem(this.currentEmailId);
             const token = localStorage.getItem('token')?.split(';') as string[];
-            if (!emailData ||!token) return;
+            if (!token) return;
 
-            const email = JSON.parse(emailData);
-            await fetch('/api/emails', {
-                method: 'DELETE',
-                body: JSON.stringify({
-                    mailbox: 'INBOX',
-                    range: this.currentEmailId
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token[0]}`
-                }
-            });
+            try {
+                document.dispatchEvent(new CustomEvent('set-loading', { detail: true }));
+
+                await fetch('/api/emails', {
+                    method: 'DELETE',
+                    body: JSON.stringify({
+                        mailbox: 'INBOX',
+                        range: this.currentEmailId
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token[0]}`
+                    }
+                });
+
+                document.dispatchEvent(new CustomEvent('set-error', { detail: null }));
+            } catch(err) {
+                document.dispatchEvent(new CustomEvent('set-error', { detail: `${err}` }));
+            } finally {
+                document.dispatchEvent(new CustomEvent('set-loading', { detail: false }));
+            };
+            
 
             document.dispatchEvent(new Event('fetch-emails'));
         })
 
         this.shadowRoot?.querySelector('button#archive')?.addEventListener('click', async () => {
-            const emailData = sessionStorage.getItem(this.currentEmailId);
             const token = localStorage.getItem('token')?.split(';') as string[];
-            if (!emailData ||!token) return;
+            if (!token) return;
 
-            const email = JSON.parse(emailData);
-            await fetch('/api/emails', {
-                method: 'PUT',
-                body: JSON.stringify({
-                    mailbox: 'INBOX',
-                    destination: 'Archive',
-                    range: this.currentEmailId
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token[0]}`
-                }
-            });
+            try {
+                document.dispatchEvent(new CustomEvent('set-loading', { detail: true }));
+
+                await fetch('/api/emails', {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        mailbox: 'INBOX',
+                        destination: 'Archive',
+                        range: this.currentEmailId
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token[0]}`
+                    }
+                });
+
+                document.dispatchEvent(new CustomEvent('set-error', { detail: null }));
+            } catch(err) {
+                document.dispatchEvent(new CustomEvent('set-error', { detail: `${err}` }));
+            } finally {
+                document.dispatchEvent(new CustomEvent('set-loading', { detail: false }));
+            };
         })
     };
 

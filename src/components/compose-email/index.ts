@@ -39,13 +39,13 @@ class ComposeEmail extends HTMLElement {
         this.shadowRoot?.appendChild(template.content.cloneNode(true));
     }
 
-    submitForm: HTMLFormElement | null = null
-    sender: HTMLInputElement | null = null
-    recipient: HTMLInputElement | null = null
-    subject: HTMLInputElement | null = null
-    content: HTMLTextAreaElement | null = null
-    bcc: HTMLInputElement | null = null
-    cc: HTMLInputElement | null = null
+    submitForm: HTMLFormElement | null = null;
+    sender: HTMLInputElement | null = null;
+    recipient: HTMLInputElement | null = null;
+    subject: HTMLInputElement | null = null;
+    content: HTMLTextAreaElement | null = null;
+    bcc: HTMLInputElement | null = null;
+    cc: HTMLInputElement | null = null;
 
     togglePrompt(visible: boolean) {
         this.confirmElements();
@@ -63,7 +63,7 @@ class ComposeEmail extends HTMLElement {
             collapsables?.forEach((el: any) => {
                 el.style.display = 'block';
             });
-        }
+        };
         this.visible = visible;
     }
 
@@ -98,18 +98,27 @@ class ComposeEmail extends HTMLElement {
                 return;
             };
 
-            await fetch('/api/emails', {
-                method: 'POST',
-                body: JSON.stringify({
-                    sender, recipient,
-                    subject, content,
-                    cc, bcc
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token[0]}`
-                }
-            });
+            try {
+                document.dispatchEvent(new CustomEvent('set-loading', { detail: true }))
+
+                await fetch('/api/emails', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        sender, recipient,
+                        subject, content,
+                        cc, bcc
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token[0]}`
+                    }
+                });
+
+                document.dispatchEvent(new CustomEvent('set-loading', { detail: false }));
+            } catch(err) {
+                document.dispatchEvent(new CustomEvent('set-loading', { detail: false }));
+                document.dispatchEvent(new CustomEvent('set-error', { detail: `${err}` }));
+            }
         });
 
         const topSpan: HTMLSpanElement = this.shadowRoot?.getElementById('compose-top') as HTMLSpanElement;
@@ -127,10 +136,10 @@ class ComposeEmail extends HTMLElement {
             this.content.defaultValue = content ?? '';
             this.subject.defaultValue = subject ?? '';
 
-            this.togglePrompt(true)
+            this.togglePrompt(true);
         })
 
-        this.togglePrompt(false)
+        this.togglePrompt(false);
     }
 
     disconnectedCallback() {
