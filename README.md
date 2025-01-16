@@ -23,10 +23,6 @@ Please install [nodejs and npm](https://nodejs.org/en/download), after that run 
 
 # Deutsch
 
-Here is the translation of your text into German:
-
----
-
 Dies ist ein einfacher E-Mail-Client, der auf reinem HTML, CSS und TypeScript basiert und Node.js als Backend verwendet.  
 Um dies auszuführen, müssen Node.js und npm auf Ihrem System installiert sein.
 
@@ -45,7 +41,3 @@ Sobald der Server läuft, können Sie sich auf der Login-Seite mit Ihrem Gmail-K
 ## Installation
 
 Bitte installieren Sie [Node.js und npm](https://nodejs.org/en/download). Führen Sie danach `npm install` im Projektverzeichnis aus.
-
----
-
-Let me know if you need any more adjustments!
