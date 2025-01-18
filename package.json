@@ -4,8 +4,8 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "tsc && webpack",
-    "dev": "rm -r dist && copyfiles -u 1 -e \"src/**/*.ts\" \"src/**/*\" dist/ && npm run build && node dist/index.js"
+    "build": "copyfiles -u 1 -e \"src/**/*.ts\" \"src/**/*\" dist/ && tsc && webpack",
+    "dev": "rm -r dist && npm run build && node dist/index.js"
   },
   "author": "sstrabe",
   "license": "MIT",

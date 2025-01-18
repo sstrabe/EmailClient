@@ -4,6 +4,8 @@
 This is a simple email client built on vanilla html, css and typescript and uses nodejs as a backend.
 To run this you must have nodejs and npm installed on your system.
 
+An already hosted version can be found at https://email.strabix.com/
+
 ## Setup
 Before starting the server, you need to create a .env file following the .env.Example.
 
