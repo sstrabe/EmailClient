@@ -38,7 +38,7 @@ Bevor Sie den Server starten, müssen Sie eine `.env`-Datei erstellen, die der `
 Um den Server zu starten und die Website bereitzustellen, führen Sie bitte `npm run dev` aus. Dies macht die App unter http://localhost:3000/ verfügbar.  
 Sobald der Server läuft, können Sie sich auf der Login-Seite mit Ihrem Gmail-Konto anmelden.
 
-> [!Hinweis]  
+> [!Note]  
 > Aus Sicherheitsgründen verlangt Gmail, dass Sie ein [App-Passwort erstellen](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://support.google.com/accounts/answer/185833%3Fhl%3Den&ved=2ahUKEwjGzp3ozPqKAxXgJNAFHaPkK7oQFnoECAsQAQ&usg=AOvVaw2qwXmKRTjsa0k-q38HqJIX) und dieses für die Anmeldung verwenden.  
 > Zusätzlich funktioniert der `dev`-Befehl derzeit nur auf macOS und Linux, da `rm` verwendet wird, um das /dist-Verzeichnis zu entfernen. Wenn Sie den `rm`-Befehl entfernen, funktioniert er auch auf anderen Betriebssystemen.
 
